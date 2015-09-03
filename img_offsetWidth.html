@@ -5,14 +5,25 @@
 <body>
 	<script src="chas-antidot.js">
 	</script>
+	Википедия
+	<b id="isWikiBlocked">
+		<i>(определяется...)</i>
+	</b>
+	<br/>
+	Ширина незагруженного изображения в Вашем браузере:
+	<span id="unexistingImageWidth">
+		<i>(определяется...)</i>
+	</span>
 	<script>
-
+		function message(wiki) {
+			document.getElementById('isWikiBlocked').innerHTML = wiki;
+			document.getElementById('unexistingImageWidth').innerHTML = chasAntidot.unexistingImage.offsetWidth;
+		};
 		chasAntidot.testSiteWithImg({
 			url: 'https://ru.wikipedia.org/favicon.ico',
-			ifBlocked: function(){alert('Wikipedia is blocked');},
-			ifNotBlocked: function(){alert('Wikipedia is not blocked');},
+			ifBlocked: function(){message('заблокирована')},
+			ifNotBlocked: function(){message('не заблокирована');},
 		});
-
 	</script>
 </body>
 </html>
