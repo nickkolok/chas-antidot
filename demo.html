@@ -7,23 +7,34 @@
 	</script>
 	Википедия
 	<b id="isWikiBlocked">
-		<i>(определяется...)</i>
 	</b>
 	<br/>
 	Ширина незагруженного изображения в Вашем браузере:
 	<span id="unexistingImageWidth">
 		<i>(определяется...)</i>
 	</span>
+	<br/>
+	<button onclick="test()">Перепроверить</button>
+	<br/>
+	<i>
+		Совет: чтобы имитировать блокировку Википедии, используйте файл hosts
+		или просто отключитесь от интернета и нажмите "Перепроверить".
+		Изменения hosts вступают в силу не мгновенно.
+	</i>
 	<script>
 		function message(wiki) {
 			document.getElementById('isWikiBlocked').innerHTML = wiki;
 			document.getElementById('unexistingImageWidth').innerHTML = chasAntidot.unexistingImage.offsetWidth;
 		};
-		chasAntidot.testSiteWithImg({
-			url: 'https://ru.wikipedia.org/static/images/project-logos/ruwiki.png',
-			ifBlocked: function(){message('заблокирована')},
-			ifNotBlocked: function(){message('не заблокирована');},
-		});
+		function test(){
+			chasAntidot.testSiteWithImg({
+				url: 'https://ru.wikipedia.org/static/images/project-logos/ruwiki.png',
+				ifBlocked: function(){message('заблокирована')},
+				ifNotBlocked: function(){message('не заблокирована');},
+			});
+			message('<i>(определяется...)</i>');
+		};
+		test();
 	</script>
 </body>
 </html>
