@@ -25,7 +25,14 @@ var chasAntidot={
 		chasAntidot.invisibleDiv.appendChild(testImage);
 		
 		setTimeout(function() {
-			if(testImage.offsetWidth == 0 || testImage.offsetWidth == chasAntidot.unexistingImage.offsetWidth){
+			if(
+				testImage.offsetWidth == 0 ||
+				(
+					testImage.offsetWidth  == chasAntidot.unexistingImage.offsetWidth
+						&&
+					testImage.offsetHeight == chasAntidot.unexistingImage.offsetHeight
+				)
+			){
 				try {
 					o.ifBlocked();
 				}catch(e) {
