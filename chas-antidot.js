@@ -51,8 +51,30 @@ var chasAntidot={
 				}catch(e) {
 				}
 			} else {
-				o.ifNotBlocked();
+				try {
+					o.ifNotBlocked();
+				}catch(e) {
+				}
 			}
 		},o.time||4000);
-	}
+	},
+	createBanner: function(message, o) {
+		o.ifNotBlocked = null;
+		o.ifBlocked = function(){chasAntidot.showBanner(message)};
+		chasAntidot.testSiteWithImg(o);
+	},
+	showBanner: function(mes) {
+		console.log('sb');
+		var banner=document.createElement('div');
+		banner.id='chasAntidot-banner';
+		banner.style.position='fixed';
+		banner.style.top  = '0';
+		banner.style.left = '0';
+		banner.style.width = '100%';
+		banner.style.backgroundColor = 'pink';
+		banner.style.padding = '10px';
+		banner.innerHTML = mes +
+			'<span style="position:fixed; right:10px;" onclick="document.getElementById(\'chasAntidot-banner\').style.display=\'none\';">x</span>';
+		document.body.appendChild(banner);
+	},
 };
