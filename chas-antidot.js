@@ -13,6 +13,12 @@ var chasAntidot={
 		chasAntidot.unexistingImage.src=Math.random();
 		chasAntidot.invisibleDiv.appendChild(chasAntidot.unexistingImage);
 	},
+	createSignalImage: function(url) {
+		var testImage=document.createElement('img');
+		testImage.src=url+'?'+Math.random();
+		chasAntidot.invisibleDiv.appendChild(testImage);
+		return testImage;
+	},
 	testSiteWithImg: function(o) {
 		if(!chasAntidot.invisibleDiv) {
 			chasAntidot.createInvisibleDiv();
@@ -20,17 +26,24 @@ var chasAntidot={
 		if(!chasAntidot.unexistingImage) {
 			chasAntidot.createUnexistingImage();
 		}
-		var testImage=document.createElement('img');
-		testImage.src=o.url+'?'+Math.random();
-		chasAntidot.invisibleDiv.appendChild(testImage);
+		var testImage=chasAntidot.createSignalImage(o.url);
 		
+		//Теперь выбираем изображение, с которым будем сравнивать
+		if(o.secondImage){
+			//Если указано второе изображение, то с ним
+			var anotherImage=chasAntidot.createSignalImage(o.secondImage);
+		} else {
+			//А иначе - с несуществующим
+			var anotherImage=chasAntidot.unexistingImage;
+		}
+
 		setTimeout(function() {
 			if(
 				testImage.offsetWidth == 0 ||
 				(
-					testImage.offsetWidth  == chasAntidot.unexistingImage.offsetWidth
+					testImage.offsetWidth  == anotherImage.offsetWidth
 						&&
-					testImage.offsetHeight == chasAntidot.unexistingImage.offsetHeight
+					testImage.offsetHeight == anotherImage.offsetHeight
 				)
 			){
 				try {
