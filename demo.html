@@ -14,6 +14,11 @@
 		<i>(определяется...)</i>
 	</span>
 	<br/>
+	Высота незагруженного изображения в Вашем браузере:
+	<span id="unexistingImageHeight">
+		<i>(определяется...)</i>
+	</span>
+	<br/>
 	<button onclick="test()">Перепроверить</button>
 	<br/>
 	<i>
@@ -24,17 +29,74 @@
 	<script>
 		function message(wiki) {
 			document.getElementById('isWikiBlocked').innerHTML = wiki;
-			document.getElementById('unexistingImageWidth').innerHTML = chasAntidot.unexistingImage.offsetWidth;
+			document.getElementById('unexistingImageWidth' ).innerHTML = chasAntidot.unexistingImage.offsetWidth;
+			document.getElementById('unexistingImageHeight').innerHTML = chasAntidot.unexistingImage.offsetHeight;
 		};
 		function test(){
 			chasAntidot.testSiteWithImg({
 				url: 'https://ru.wikipedia.org/static/images/project-logos/ruwiki.png',
-				ifBlocked: function(){message('заблокирована')},
+				ifBlocked: function(){message('заблокирована');},
 				ifNotBlocked: function(){message('не заблокирована');},
 			});
 			message('<i>(определяется...)</i>');
 		};
 		test();
 	</script>
+	А дальше, по <a href="http://habrahabr.ru/post/256339/">намечающейся традиции</a>, изложение пойдёт в вопросно-ответной форме.
+	<h1>
+		ЧАВО
+	</h1>
+	<h2>
+		Для чего это вообще нужно?
+	</h2>
+	Чтобы инициативный вебмастер мог при желании предупредить пользователей своего сайта о том, что Википедия заблокирована
+	(а не упала с неизвестной ошибкой, как это выглядит при подмене сертификата).
+	<h2>
+		Как это работает?
+	</h2>
+	Создаётся невидимый блок HTML-кода, содержащий два изображения:
+	одно контрольное - с заведомо несуществующего URL,
+	второе сигнальное - любое изображение с проверяемого сайта.
+	Если их размеры через 4 секунды (настраивается) совпадают - значит, изображение с проверяемого сайта не загрузилось,
+	то есть он либо "лежит" настолько, что не может отдавать даже статику, либо заблокирован.
+	<h2>
+		А подробнее?
+	</h2>
+	Изображение в HTML, вставлемое тэгом img, по умолчанию имеет размеры, определяемые самим файлом-картинкой.
+	Изображение, которое загрузить не удалось, тоже имеет какие-то размеры - в разных браузерах разные.
+	Вот они (ширина x высота):
+	<ul>
+		<li>
+			Chrome 44.0.2403.155 - 0x0 (до загрузки), 20x20 (при неудачной загрузке)
+		</li>
+		<li>
+			Firefox 37.0 - 24x24
+		</li>
+		<li>
+			Opera 12.16 - 114x22
+		</li>
+	</ul>
+	Получить размеры элемента на Javascript можно с помощью свойств элемента .offsetWidth и .offsetHeight
+	<h2>
+		А если вдруг сигнальное изображение по размерам совпадёт с тем, что отобразит браузер при ошибке?
+	</h2>
+	Это достаточно маловероятно, учитывая, что сравниваются и ширина, и высота.
+	Но всё же фавиконы лучше не дёргать.
+	<h2>
+		А исходники?
+	</h2>
+	<a href="https://github.com/nickkolok/chas-antidot">На гитхабе</a> под GPLv3.
+	<h2>
+		И как этим всем пользоваться?
+	</h2>
+	Постарался сделать код читабельным, хотя, конечно, это не освобождает меня от приведения примера.
+<pre>
+	chasAntidot.testSiteWithImg({
+		url: 'https://ru.wikipedia.org/static/images/project-logos/ruwiki.png',
+		ifBlocked: function(){message('заблокирована');},
+		ifNotBlocked: function(){message('не заблокирована');},
+	});
+</pre>
+	Никаких дополнительных библиотек типа jQuery не требуется, всё на чистом JS.
 </body>
 </html>
